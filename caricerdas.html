@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CARI CERDAS - Literasi Digital</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!--
+    ======================================================
+    KESEPAKATAN ID UNTUK script.js
+    Kunci kategori: mencari, sumber, bandingkan, hoaks, keamanan, etika, kuis
+
+    Halaman pilihan ganda (mencari, sumber, hoaks, keamanan, etika, kuis):
+      progres-{kunci}   -> badge "Soal X / 5"
+      teks-{kunci}      -> teks kasus / pertanyaan
+      pilihan-{kunci}   -> wadah tombol pilihan (diisi oleh JavaScript)
+      feedback-{kunci}  -> kotak pesan benar / salah
+      next-{kunci}      -> tombol soal berikutnya
+
+    Halaman bandingkan (khusus):
+      progres-bandingkan, teks-konteks-bandingkan,
+      btn-banding-a, btn-banding-b, list-sumber-a, list-sumber-b,
+      feedback-bandingkan, next-bandingkan
+    ======================================================
+    -->
+
+    <div class="app-container">
+
+        <!-- HALAMAN: BERANDA -->
+        <section id="beranda" class="halaman aktif">
+            <h1 class="judul-utama">CARI CERDAS</h1>
+            <h3 class="sub-judul">Literasi Digital dalam Mencari Informasi</h3>
+            <p class="deskripsi">"Belajar mencari, memilih, membandingkan, dan mengevaluasi informasi digital."</p>
+            <button class="btn-utama" onclick="pindahHalaman('menu-utama')">MULAI BELAJAR</button>
+        </section>
+
+        <!-- HALAMAN: MENU UTAMA -->
+        <section id="menu-utama" class="halaman">
+            <h2>Menu Utama</h2>
+            <div class="grid-menu">
+                <button class="btn-menu" onclick="bukaMenu('cara-mencari')">1. Cara Mencari</button>
+                <button class="btn-menu" onclick="bukaMenu('pilih-sumber')">2. Pilih Sumber</button>
+                <button class="btn-menu" onclick="bukaMenu('bandingkan-info')">3. Bandingkan Informasi</button>
+                <button class="btn-menu" onclick="bukaMenu('hoaks')">4. Kenali Hoaks</button>
+                <button class="btn-menu" onclick="bukaMenu('keamanan')">5. Keamanan Digital</button>
+                <button class="btn-menu" onclick="bukaMenu('etika')">6. Etika Bermedia Sosial</button>
+                <button class="btn-menu" onclick="bukaMenu('kuis')">7. Kuis Evaluasi</button>
+            </div>
+            <button class="btn-kembali" onclick="pindahHalaman('beranda')">Kembali ke Beranda</button>
+        </section>
+
+        <!-- HALAMAN 1: CARA MENCARI -->
+        <section id="cara-mencari" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-mencari">Soal 1 / 5</span>
+            </div>
+            <h2>1. Menentukan Kata Kunci</h2>
+            <div class="kartu-info">
+                <p id="teks-mencari">Memuat skenario...</p>
+                <div class="grid-menu" id="pilihan-mencari" style="margin-top: 15px;"></div>
+            </div>
+            <p id="feedback-mencari" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-mencari" style="display:none;" onclick="lanjutSoal('mencari')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 2: PILIH SUMBER -->
+        <section id="pilih-sumber" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-sumber">Soal 1 / 5</span>
+            </div>
+            <h2>2. Memilih Sumber Informasi</h2>
+            <div class="kartu-info">
+                <p id="teks-sumber">Memuat situasi...</p>
+                <p style="margin-top: 14px; font-weight: 600; font-size: 0.95rem;">Manakah tindakan atau sumber yang paling tepat?</p>
+                <div class="grid-menu" id="pilihan-sumber" style="margin-top: 12px;"></div>
+            </div>
+            <p id="feedback-sumber" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-sumber" style="display:none;" onclick="lanjutSoal('sumber')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 3: BANDINGKAN INFORMASI -->
+        <section id="bandingkan-info" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-bandingkan">Soal 1 / 5</span>
+            </div>
+            <h2>3. Membandingkan Informasi</h2>
+            <p id="teks-konteks-bandingkan" style="margin-bottom:15px; font-weight:600; color:#0f172a;"></p>
+            <div class="grid-banding">
+                <button class="kartu-garis btn-banding" id="btn-banding-a" onclick="cekBandingkan('A')">
+                    <h3>SUMBER A</h3>
+                    <ul id="list-sumber-a" style="pointer-events:none;"></ul>
+                </button>
+                <button class="kartu-garis btn-banding" id="btn-banding-b" onclick="cekBandingkan('B')">
+                    <h3>SUMBER B</h3>
+                    <ul id="list-sumber-b" style="pointer-events:none;"></ul>
+                </button>
+            </div>
+            <p id="feedback-bandingkan" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-bandingkan" style="display:none;" onclick="lanjutSoal('bandingkan')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 4: KENALI HOAKS -->
+        <section id="hoaks" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-hoaks">Soal 1 / 5</span>
+            </div>
+            <h2>4. Mengenali Hoaks</h2>
+            <div class="kartu-info">
+                <p id="teks-hoaks">Memuat pertanyaan...</p>
+                <div class="grid-menu" id="pilihan-hoaks" style="margin-top: 15px;"></div>
+            </div>
+            <p id="feedback-hoaks" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-hoaks" style="display:none;" onclick="lanjutSoal('hoaks')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 5: KEAMANAN DIGITAL -->
+        <section id="keamanan" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-keamanan">Soal 1 / 5</span>
+            </div>
+            <h2>5. Keamanan Digital</h2>
+            <div class="kartu-info">
+                <p id="teks-keamanan">Memuat pertanyaan...</p>
+                <div class="grid-menu" id="pilihan-keamanan" style="margin-top: 15px;"></div>
+            </div>
+            <p id="feedback-keamanan" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-keamanan" style="display:none;" onclick="lanjutSoal('keamanan')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 6: ETIKA BERMEDIA SOSIAL -->
+        <section id="etika" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-etika">Soal 1 / 5</span>
+            </div>
+            <h2>6. Etika Bermedia Sosial</h2>
+            <div class="kartu-info">
+                <p id="teks-etika">Memuat pertanyaan...</p>
+                <div class="grid-menu" id="pilihan-etika" style="margin-top: 15px;"></div>
+            </div>
+            <p id="feedback-etika" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-etika" style="display:none;" onclick="lanjutSoal('etika')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+        <!-- HALAMAN 7: KUIS EVALUASI -->
+        <section id="kuis" class="halaman">
+            <div class="header-sesi">
+                <span class="badge-progres" id="progres-kuis">Soal 1 / 5</span>
+            </div>
+            <h2>7. Kuis Literasi Digital</h2>
+            <div class="kartu-info">
+                <p id="teks-kuis">Memuat pertanyaan...</p>
+                <div class="grid-menu" id="pilihan-kuis" style="margin-top: 15px;"></div>
+            </div>
+            <p id="feedback-kuis" class="feedback-teks"></p>
+            <button class="btn-utama" id="next-kuis" style="display:none;" onclick="lanjutSoal('kuis')">SOAL BERIKUTNYA ➔</button>
+            <button class="btn-kembali" onclick="pindahHalaman('menu-utama')">Batal &amp; Kembali ke Menu</button>
+        </section>
+
+    </div>
+
+    <script src="materi.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

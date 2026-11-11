@@ -1,0 +1,602 @@
+/* ==========================================================
+   CARI CERDAS - style.css
+   Tema: teal + sky, tekstur grain halus, pola garis diagonal,
+   kartu kaca (glass) mengambang.
+   Mudah diatur lewat variabel di :root.
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* Warna utama */
+    --teal-400: #2dd4bf;
+    --teal-500: #14b8a6;
+    --teal-600: #0d9488;
+    --teal-700: #0f766e;
+    --emerald-500: #10b981;
+    --emerald-600: #059669;
+    --sky-500: #0ea5e9;
+    --sky-700: #0369a1;
+    --indigo-400: #818cf8;
+
+    /* Netral */
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-400: #94a3b8;
+    --slate-500: #64748b;
+    --slate-600: #475569;
+    --slate-700: #334155;
+    --slate-800: #1e293b;
+    --slate-900: #0f172a;
+
+    /* Pengaturan tekstur (ubah angka ini kalau mau lebih tipis / tebal) */
+    --opasitas-grain-latar: 0.32;
+    --opasitas-grain-kartu: 0.22;
+
+    /* Tekstur grain (noise) dibuat dari SVG, tanpa file gambar */
+    --tekstur-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- Reset dasar ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* ---------- Latar belakang bertekstur ---------- */
+body {
+    background-color: #eaf4f3;
+    background-image:
+        radial-gradient(circle at 12% 8%, rgba(20, 184, 166, 0.28), transparent 38%),
+        radial-gradient(circle at 92% 18%, rgba(14, 165, 233, 0.26), transparent 40%),
+        radial-gradient(circle at 70% 95%, rgba(129, 140, 248, 0.20), transparent 42%),
+        radial-gradient(rgba(15, 118, 110, 0.20) 1px, transparent 1.2px);
+    background-size: auto, auto, auto, 22px 22px;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--slate-700);
+    padding: 20px;
+}
+
+/* Lapisan grain di seluruh layar */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: var(--tekstur-grain);
+    opacity: var(--opasitas-grain-latar);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---------- Kartu aplikasi (glass + tekstur) ---------- */
+.app-container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+    min-height: 80vh;
+    padding: 44px 26px 36px;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.84);
+    background-image:
+        radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.14), transparent 42%),
+        radial-gradient(circle at 0% 100%, rgba(16, 185, 129, 0.14), transparent 42%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 180px),
+        repeating-linear-gradient(135deg, rgba(13, 148, 136, 0.045) 0 1px, transparent 1px 12px);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow:
+        0 30px 60px -20px rgba(15, 118, 110, 0.28),
+        0 12px 24px -12px rgba(3, 105, 161, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* Garis warna di atas kartu */
+.app-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--emerald-500), var(--teal-500), var(--sky-500), var(--indigo-400));
+    z-index: 2;
+}
+
+/* Grain tipis di dalam kartu */
+.app-container::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--tekstur-grain);
+    opacity: var(--opasitas-grain-kartu);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---------- Manajemen halaman ---------- */
+.halaman {
+    display: none;
+    position: relative;
+    z-index: 1;
+    animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.halaman.aktif {
+    display: block;
+}
+
+/* ---------- Beranda ---------- */
+#beranda::before {
+    content: "🔍";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    height: 92px;
+    margin: 6px auto 24px;
+    font-size: 2.6rem;
+    border-radius: 28px;
+    background: linear-gradient(145deg, #ffffff, #ccfbf1);
+    border: 1px solid rgba(20, 184, 166, 0.35);
+    box-shadow:
+        0 18px 30px -10px rgba(13, 148, 136, 0.45),
+        inset 0 2px 0 rgba(255, 255, 255, 0.9);
+    animation: melayang 3.6s ease-in-out infinite;
+}
+
+#beranda .judul-utama {
+    margin-top: 0;
+}
+
+/* ---------- Tipografi ---------- */
+.judul-utama {
+    font-size: 2.7rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--teal-600) 0%, var(--sky-700) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1.2px;
+    margin-bottom: 8px;
+    margin-top: 30px;
+    filter: drop-shadow(0 6px 10px rgba(3, 105, 161, 0.18));
+}
+
+.sub-judul {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--slate-600);
+    margin-bottom: 20px;
+}
+
+.deskripsi,
+.tips {
+    font-size: 0.95rem;
+    color: var(--slate-500);
+    margin-bottom: 30px;
+    line-height: 1.7;
+}
+
+h2 {
+    color: var(--slate-800);
+    margin-bottom: 26px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* Garis kecil di bawah judul halaman */
+h2::after {
+    content: "";
+    display: block;
+    width: 44px;
+    height: 4px;
+    margin: 10px auto 0;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--emerald-500), var(--sky-500));
+}
+
+/* ---------- Header sesi & badge progres ---------- */
+.header-sesi {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.badge-progres {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 16px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: var(--teal-700);
+    background: linear-gradient(135deg, #ecfdf5, #e0f2fe);
+    border: 1px solid rgba(20, 184, 166, 0.35);
+    border-radius: 99px;
+    box-shadow: 0 6px 12px -6px rgba(13, 148, 136, 0.35);
+}
+
+.badge-progres::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--emerald-500), var(--sky-500));
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+/* ---------- Tombol utama ---------- */
+.btn-utama {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+    border-radius: 14px;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, var(--emerald-500) 0%, var(--teal-600) 55%, var(--sky-700) 130%);
+    color: #ffffff;
+    padding: 17px 32px;
+    width: 100%;
+    margin-top: 20px;
+    box-shadow:
+        0 14px 22px -8px rgba(13, 148, 136, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Kilau cahaya saat di-hover */
+.btn-utama::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.7s ease;
+}
+
+.btn-utama:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 20px 28px -8px rgba(13, 148, 136, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.btn-utama:hover::after {
+    left: 140%;
+}
+
+.btn-utama:active {
+    transform: translateY(1px);
+}
+
+/* ---------- Tombol menu ---------- */
+.btn-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    cursor: pointer;
+    width: 100%;
+    padding: 17px 20px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.97rem;
+    color: var(--slate-600);
+    background: linear-gradient(180deg, #ffffff, var(--slate-50));
+    border: 2px solid var(--slate-200);
+    border-radius: 14px;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+    transition: all 0.25s ease;
+}
+
+.btn-menu::after {
+    content: "›";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    font-size: 1.3rem;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--teal-600);
+    background: #ecfdf5;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+}
+
+.btn-menu:hover {
+    color: var(--slate-900);
+    border-color: var(--teal-400);
+    background: linear-gradient(180deg, #ffffff, #f0fdfa);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -10px rgba(13, 148, 136, 0.35);
+}
+
+.btn-menu:hover::after {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--emerald-500), var(--sky-500));
+    transform: translateX(3px);
+}
+
+/* ---------- Tombol pilihan jawaban ---------- */
+.btn-pilihan {
+    display: block;
+    cursor: pointer;
+    width: 100%;
+    padding: 15px 18px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--slate-600);
+    background: linear-gradient(180deg, #ffffff, var(--slate-50));
+    border: 2px solid var(--slate-200);
+    border-radius: 14px;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+    transition: all 0.22s ease;
+}
+
+.btn-pilihan:hover {
+    color: var(--slate-900);
+    border-color: var(--teal-400);
+    background: linear-gradient(180deg, #ffffff, #f0fdfa);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px -10px rgba(13, 148, 136, 0.35);
+}
+
+.btn-pilihan:active {
+    transform: translateY(1px);
+}
+
+/* ---------- Tombol kembali ---------- */
+.btn-kembali {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    color: var(--slate-400);
+    margin-top: 28px;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.btn-kembali:hover {
+    color: var(--teal-700);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ---------- Layout grid ---------- */
+.grid-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.grid-banding {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+/* ---------- Kartu A/B (Bandingkan Informasi) ---------- */
+.kartu-garis {
+    position: relative;
+    cursor: pointer;
+    background: linear-gradient(180deg, #ffffff, var(--slate-50));
+    border: 2px solid var(--slate-200);
+    border-radius: 18px;
+    padding: 20px 15px;
+    text-align: left;
+    box-shadow: 0 4px 10px -4px rgba(15, 23, 42, 0.08);
+    transition: all 0.3s ease;
+}
+
+.btn-banding:hover {
+    border-color: var(--sky-500);
+    background: linear-gradient(180deg, #ffffff, #f0f9ff);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 24px -10px rgba(14, 165, 233, 0.3);
+}
+
+.kartu-garis h3 {
+    display: table;
+    margin: 0 auto 14px;
+    padding: 5px 14px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--sky-700);
+    background: #e0f2fe;
+    border-radius: 99px;
+    text-align: center;
+}
+
+.kartu-garis ul,
+.daftar-cek {
+    text-align: left;
+    padding-left: 0;
+    list-style-type: none;
+    font-size: 0.85rem;
+    line-height: 1.65;
+    color: var(--slate-600);
+}
+
+.kartu-garis li {
+    margin-bottom: 9px;
+}
+
+/* ---------- Kartu info / skenario ---------- */
+.kartu-info {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 100% 0%, rgba(14, 165, 233, 0.10), transparent 45%),
+        linear-gradient(145deg, #ffffff 0%, #f1f8f7 100%);
+    border: 1px solid var(--slate-200);
+    border-radius: 18px;
+    padding: 24px 22px 24px 26px;
+    margin-bottom: 24px;
+    text-align: left;
+    line-height: 1.65;
+    color: var(--slate-700);
+    box-shadow:
+        0 10px 20px -12px rgba(15, 118, 110, 0.25),
+        inset 0 2px 4px rgba(255, 255, 255, 0.7);
+}
+
+/* Garis aksen di sisi kiri kartu */
+.kartu-info::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 5px;
+    background: linear-gradient(180deg, var(--emerald-500), var(--sky-500));
+}
+
+/* ---------- Area feedback ---------- */
+.feedback-teks {
+    margin-top: 18px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-height: 20px;
+    line-height: 1.6;
+    padding: 0 15px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+.feedback-teks:not(:empty) {
+    animation: munculMembal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ---------- Aksesibilitas ---------- */
+button:focus-visible {
+    outline: 3px solid rgba(14, 165, 233, 0.55);
+    outline-offset: 3px;
+}
+
+/* ==========================================
+   ANIMASI & KELAS DINAMIS (dipakai JavaScript)
+   ========================================== */
+
+@keyframes slideUpFade {
+    from { opacity: 0; transform: translateY(15px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes melayang {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+@keyframes munculMembal {
+    from { opacity: 0; transform: translateY(8px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-3px); }
+    80% { transform: translateX(2px); }
+}
+
+.getar {
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Status jawaban */
+.jawaban-salah {
+    background: #fef2f2 !important;
+    border-color: #fca5a5 !important;
+    color: #b91c1c !important;
+    box-shadow: 0 10px 18px -10px rgba(220, 38, 38, 0.4) !important;
+}
+
+.jawaban-benar {
+    background: #f0fdf4 !important;
+    border-color: #86efac !important;
+    color: #15803d !important;
+    box-shadow: 0 10px 18px -10px rgba(22, 163, 74, 0.45) !important;
+}
+
+/* Warna isi kartu A/B ikut berubah saat benar / salah */
+.kartu-garis.jawaban-benar ul,
+.kartu-garis.jawaban-benar h3 {
+    color: #15803d;
+}
+
+.kartu-garis.jawaban-salah ul,
+.kartu-garis.jawaban-salah h3 {
+    color: #b91c1c;
+}
+
+/* ==========================================
+   RESPONSIF (layar HP)
+   ========================================== */
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+
+    .app-container {
+        padding: 38px 18px 28px;
+        border-radius: 24px;
+    }
+
+    .judul-utama {
+        font-size: 2.2rem;
+    }
+
+    .grid-banding {
+        gap: 10px;
+    }
+
+    .kartu-garis {
+        padding: 16px 11px;
+    }
+
+    .kartu-info {
+        padding: 20px 16px 20px 20px;
+    }
+}
+
+/* Hormati pengguna yang mematikan animasi */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+}
